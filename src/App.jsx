@@ -6,8 +6,10 @@ function App() {
   const [text, setText] = useState('')
   // phase 0 = idle, 1 = eyes flying, 2 = brows showing, 3 = title shrunk
   const [phase, setPhase] = useState(0)
+  const [hideImage, setHideImage] = useState(false)
   const textareaRef = useRef(null)
   const singleLineHeightRef = useRef(null)
+  const lineHeightRef = useRef(null)
   const dot1Ref = useRef(null)
   const dot2Ref = useRef(null)
   const i1Ref = useRef(null)
@@ -15,9 +17,15 @@ function App() {
 
   // Capture single-line height on mount
   useEffect(() => {
-    if (textareaRef.current) {
-      singleLineHeightRef.current = textareaRef.current.scrollHeight
-    }
+    const ta = textareaRef.current
+    if (!ta) return
+    ta.rows = 1
+    const h1 = ta.scrollHeight
+    ta.rows = 2
+    const h2 = ta.scrollHeight
+    ta.rows = 1
+    singleLineHeightRef.current = h1
+    lineHeightRef.current = h2 - h1
   }, [])
 
   const handleChange = (e) => {
@@ -30,11 +38,32 @@ function App() {
       ta.style.height = 'auto'
       ta.style.height = ta.scrollHeight + 'px'
 
+      const lh = lineHeightRef.current
+      const base = singleLineHeightRef.current
+
       // Trigger animation only when third row appears (two full rows typed)
-      const isThirdRow = ta.scrollHeight > singleLineHeightRef.current * 2
+      const isThirdRow = ta.scrollHeight > base + lh
       if (isThirdRow && phase === 0) {
         triggerAnimation()
       }
+
+      // Reset back to idle when below 3 rows
+      if (!isThirdRow && phase > 0) {
+        setPhase(0)
+        if (dot1Ref.current) {
+          dot1Ref.current.style.transition = 'none'
+          dot1Ref.current.style.transform = ''
+        }
+        if (dot2Ref.current) {
+          dot2Ref.current.style.transition = 'none'
+          dot2Ref.current.style.transform = ''
+        }
+      }
+
+      // Fade image on fourth row
+      const isFourthRow = ta.scrollHeight > base + lh * 2
+      if (isFourthRow && !hideImage) setHideImage(true)
+      if (!isFourthRow && hideImage) setHideImage(false)
     }
   }
 
@@ -91,10 +120,6 @@ function App() {
   return (
     <div className={`app phase-${phase}`}>
       <div className="face">
-        <div className="brows">
-          <span className="brow brow-left">,</span>
-          <span className="brow brow-right">,</span>
-        </div>
         <div className="eyes">
           <span className="dot-wrapper"><span ref={dot1Ref} className="dot">•</span></span>
           <span className="dot-wrapper"><span ref={dot2Ref} className="dot">•</span></span>
@@ -113,7 +138,7 @@ function App() {
         placeholder=""
         rows={1}
       />
-      <img src={spillImg} className="teacup" alt="Spill it" />
+      <img src={spillImg} className={`teacup${hideImage ? ' hidden' : ''}`} alt="Spill it" />
     </div>
   )
 }

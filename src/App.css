@@ -54,16 +54,6 @@
   user-select: none;
 }
 
-.brow-left {
-  transform: rotate(-140deg);
-  display: inline-block;
-}
-
-.brow-right {
-  transform: rotate(140deg) scaleX(-1);
-  display: inline-block;
-}
-
 .eyes {
   display: flex;
   gap: 100px;
@@ -127,5 +117,10 @@
   width: clamp(200px, 30vw, 340px);
   height: auto;
   mix-blend-mode: multiply;
+  transition: opacity 0.6s ease;
+}
+
+.teacup.hidden {
+  opacity: 0;
 }
 
