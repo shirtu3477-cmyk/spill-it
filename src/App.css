@@ -1,0 +1,131 @@
+/* ── layout ─────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #faf8f5;
+  padding: 40px 20px;
+  gap: 0;
+}
+
+/* ── face (hidden until phase 1) ─────────── */
+.face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  margin-bottom: 0;
+  transition: margin-bottom 0.4s ease;
+  pointer-events: none;
+}
+
+/* Eyes appear immediately at phase 1 */
+.app.phase-1 .face,
+.app.phase-2 .face,
+.app.phase-3 .face {
+  opacity: 1;
+  margin-bottom: 125px;
+}
+
+/* Brows hidden until phase 2 */
+.brows {
+  display: flex;
+  gap: 100px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.app.phase-2 .brows,
+.app.phase-3 .brows {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.brow {
+  font-family: 'Special Elite', cursive;
+  font-size: 80pt;
+  color: #1a1a1a;
+  line-height: 0;
+  display: inline-block;
+  user-select: none;
+}
+
+.brow-left {
+  transform: rotate(-140deg);
+  display: inline-block;
+}
+
+.brow-right {
+  transform: rotate(140deg) scaleX(-1);
+  display: inline-block;
+}
+
+.eyes {
+  display: flex;
+  gap: 100px;
+  margin-top: 22px;
+}
+
+.dot-wrapper {
+  display: inline-block;
+}
+
+.dot {
+  font-family: 'Special Elite', cursive;
+  font-size: 90pt;
+  color: #1a1a1a;
+  line-height: 1;
+  display: inline-block;
+  user-select: none;
+  will-change: transform;
+}
+
+/* ── title ───────────────────────────────── */
+.title {
+  font-family: 'Special Elite', cursive;
+  font-size: 80pt;
+  color: #1a1a1a;
+  margin: 0 0 104px 0;
+  transition: font-size 0.5s ease, margin 0.5s ease;
+  line-height: 1.1;
+  letter-spacing: 6%;
+}
+
+.app.phase-3 .title {
+  font-size: 18pt;
+  margin: 0 0 158px 0;
+}
+
+/* ── input ───────────────────────────────── */
+.secret-input {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 18px;
+  padding: 8px 12px;
+  border: 1px solid #c0bdb8;
+  background: #ffffff;
+  outline: none;
+  color: #1a1a1a;
+  width: 280px;
+  min-height: 40px;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.5;
+  transition: height 0.1s ease;
+  margin-bottom: 119px;
+}
+
+.secret-input:focus {
+  border-color: #888;
+}
+
+/* ── teacup ──────────────────────────────── */
+.teacup {
+  width: clamp(200px, 30vw, 340px);
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
